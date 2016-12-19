@@ -31,7 +31,6 @@
 #include <string.h>
 #include "sam.h"
 
-
 /* this utility gets unmapped reads from the end of bam file assuming existence of chrM */
 
 void quickunmap(char *infn, char *reg) {
@@ -70,7 +69,7 @@ void quickunmap(char *infn, char *reg) {
 
 static int usage() {
   fprintf(stderr, "\n");
-  fprintf(stderr, "Usage: quickunmap [options] [in.bam] -g chrM\n");
+  fprintf(stderr, "Usage: quickunmap [options] in.bam\n");
   fprintf(stderr, "Input options:\n");
 	fprintf(stderr, "     in.bam    input bam, must be sorted and indexed.\n");
 	fprintf(stderr, "     -g        region (optional, jump to region before processing), typically a late chromosome.\n");
