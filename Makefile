@@ -7,7 +7,7 @@ LSAM0119 = $(LSAM0119_DIR)/libsam.a
 $(LSAM0119) :
 	make -C $(LSAM0119_DIR) libsam.a
 
-quickunmap : $(LSAM0119)
+quickunmap : $(LSAM0119) quickunmap.c
 	gcc $(CFLAGS) -o $@ -I$(LSAM0119_DIR) quickunmap.c $(LSAM0119) -lz -lpthread
 
 clean:
