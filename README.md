@@ -16,5 +16,5 @@ $ make
 
 ## Usage
 ```
-$ quickunmap -i in.bam
+$ quickunmap in.bam
 ```
