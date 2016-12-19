@@ -10,7 +10,7 @@ This tool assumes the unmapped reads do not contain chromosome name and appended
 ## Install
 
 ```
-$ wget [lastest release]
+$ wget https://github.com/zwdzwd/quickunmap/archive/master.zip
 $ make
 ```
 
