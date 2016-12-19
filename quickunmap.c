@@ -36,6 +36,11 @@
 
 void quickunmap(char *infn, char *reg) {
 	samfile_t *in = samopen(infn, "rb", 0);
+  if (!in) {
+    fprintf(stderr, "Cannot open input bam %s.\n", infn);
+    fflush(stderr);
+    exit(1);
+  }
 	samfile_t *out = samopen("-", "wh", in->header);
 	bam_index_t *idx = bam_index_load(infn);
 	int tid, beg, end;
@@ -65,9 +70,9 @@ void quickunmap(char *infn, char *reg) {
 
 static int usage() {
   fprintf(stderr, "\n");
-  fprintf(stderr, "Usage: quickunmap [options] -i [in.bam] -g chrM\n");
+  fprintf(stderr, "Usage: quickunmap [options] [in.bam] -g chrM\n");
   fprintf(stderr, "Input options:\n");
-	fprintf(stderr, "     -i        input bam.\n");
+	fprintf(stderr, "     in.bam    input bam, must be sorted and indexed.\n");
 	fprintf(stderr, "     -g        region (optional, jump to region before processing), typically a late chromosome.\n");
   fprintf(stderr, "     -h        this help.\n");
   fprintf(stderr, "\n");
@@ -79,9 +84,8 @@ int main(int argc, char *argv[]) {
 	char *reg = 0;										/* region */
 	char *infn = 0;
   if (argc < 2) return usage();
-  while ((c = getopt(argc, argv, "i:g:h")) >= 0) {
+  while ((c = getopt(argc, argv, "g:h")) >= 0) {
     switch (c) {
-		case 'i': infn = optarg; break;
 		case 'g': reg = optarg; break;
     case 'h': return usage();
     default:
@@ -90,6 +94,15 @@ int main(int argc, char *argv[]) {
       break;
     }
   }
+
+  if (optind < argc)
+    infn = argv[optind];
+  else {
+    fprintf(stderr, "Please provide input bam. Abort.\n");
+    fflush(stderr);
+    exit(1);
+  }
+    
 
   if (!reg) {
     fprintf(stderr, "No \"late\" chromosome specified, use chrM\n");
