@@ -1,3 +1,32 @@
+/**
+ * This tool index a later chromosome to speed up the search of unmapped reads.
+ * It works for all species with the knowledge of a "late" chromosome. For human
+ * and mouse, the default chrM should work. The input bam must be sorted and 
+ * indexed by samtools.
+ *
+ *
+ * The MIT License (MIT)
+ * Copyright (c) 2016 Wanding.Zhou@vai.org
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+**/
+
 #include <stdio.h>
 #include <string.h>
 #include "sam.h"
@@ -5,7 +34,7 @@
 
 /* this utility gets unmapped reads from the end of bam file assuming existence of chrM */
 
-void getunmapped(char *infn, char *reg) {
+void quickunmap(char *infn, char *reg) {
 	samfile_t *in = samopen(infn, "rb", 0);
 	samfile_t *out = samopen("-", "wh", in->header);
 	bam_index_t *idx = bam_index_load(infn);
@@ -36,7 +65,7 @@ void getunmapped(char *infn, char *reg) {
 
 static int usage() {
   fprintf(stderr, "\n");
-  fprintf(stderr, "Usage: getunmapped [options] -i [in.bam] -g chrM\n");
+  fprintf(stderr, "Usage: quickunmap [options] -i [in.bam] -g chrM\n");
   fprintf(stderr, "Input options:\n");
 	fprintf(stderr, "     -i        input bam.\n");
 	fprintf(stderr, "     -g        region (optional, jump to region before processing), typically a late chromosome.\n");
@@ -62,7 +91,13 @@ int main(int argc, char *argv[]) {
     }
   }
 
-	getunmapped(infn, reg);
+  if (!reg) {
+    fprintf(stderr, "No \"late\" chromosome specified, use chrM\n");
+    fflush(stderr);
+    reg = strdup("chrM");
+  }
+
+	quickunmap(infn, reg);
 
 	return 0;
 }
