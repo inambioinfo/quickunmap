@@ -14,17 +14,6 @@ $ wget https://github.com/zwdzwd/quickunmap/archive/master.zip
 $ make
 ```
 
-Note: install from git clone should also clone the samtools submodule.
-```
-$ git clone --recursive git://github.com/zwdzwd/quickunmap.git
-```
-or
-```
-$ git clone git://github.com/zwdzwd/quickunmap.git
-$ cd quickunmap
-$ git submodule update --init --recursive
-```
-
 ## Usage
 ```
 $ quickunmap -i in.bam
