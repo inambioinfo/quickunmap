@@ -55,7 +55,7 @@ void quickunmap(char *infn, char *reg) {
 			/* char *s = bam_format1_core(in->header, b, BAM_OFDEC); */
 			/* puts(s); */
 			/* free(s); */
-			/* cnt_unmapped++; */
+      cnt_unmapped++;
 		}
 	}
 	bam_destroy1(b);
